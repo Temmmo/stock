@@ -50,7 +50,7 @@ def stock_I(num):
         while r < len(allLines):       #处理 大文件
             visit_index = re.compile(r'^访问')
             visit = (allLines[r + 0].decode('gbk')).encode('utf-8')
-            while str(re.match(visit_index, visit)) == 'None'and r < len(allLines)-3:
+            while str(re.match(visit_index, visit)) == 'None':
                 r = r + 1
                 visit = (allLines[r + 0].decode('gbk')).encode('utf-8')
             line_2 = allLines[r + 1].decode(encoding='gbk')#回复
@@ -118,12 +118,26 @@ def stock_I(num):
 
 start = datetime.datetime.now()
 if __name__ =="__main__":
-    #pool =multiprocessing.Pool(processes = 4)
-    #for i in xrange(0,901000):
-        #pool.apply_async(stock_I,(i,))
-    #pool.close()
-    #pool.join()
-    stock_I(4)
+    os.chdir("/home/yutuo/stockdata/东方财富股吧/")
+    for count in xrange(1,902):
+        for i in range(1000*(count-1), 1000 * count):
+            filename = "/home/yutuo/stockdata/东方财富股吧/" + str(i).zfill(6) + ".rar"
+            if (os.path.exists(filename)):
+                unrar_filename = "unrar x " + filename
+                os.system(unrar_filename)
+                print "unrar: ", filename
+        pool = multiprocessing.Pool(processes=2)
+        for i in xrange(3, 901000):
+            pool.apply_async(stock_I, (i,))
+        pool.close()
+        pool.join()
+        for i in range(3, 901000):
+            filename = "/home/yutuo/stockdata/东方财富股吧/" + str(i).zfill(6)
+            if (os.path.exists(filename)):
+                del_filename = "rm -r " + filename
+                os.system(del_filename)
+                print "remove: ", filename
+
 
 
 
