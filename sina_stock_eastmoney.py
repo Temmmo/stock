@@ -10,10 +10,10 @@ import multiprocessing
 conn ={}
 curdor={}
 def stock_I(num):
-    filename = "/home/yutuo/data/东方财富股吧/" + str(num).zfill(6)
+    filename = "/home/yutuo/haileydata/eastmoney2/" + str(num).zfill(6)
     if os.path.exists(filename):
-        os.chdir("/home/yutuo/data/东方财富股吧/" + str(num).zfill(6))
-        #print "file exits"
+        os.chdir("/home/yutuo/haileydata/eastmoney2/" + str(num).zfill(6))
+        print "file exits"
         conn[num] = MySQLdb.Connect(
             host='127.0.0.1',
             port=3306,
@@ -42,11 +42,11 @@ def stock_I(num):
             #print "create table wrong:",e
             conn[num].rollback()
         os.system("cat *.txt >file_big.txt")
-        filename_txt="/home/yutuo/data/东方财富股吧/"+str(num).zfill(6)+"/file_big.txt"
+        filename_txt= "/home/yutuo/haileydata/eastmoney2/"+str(num).zfill(6)+"/file_big.txt"
         r=0
         with open(filename_txt, 'r')as fp:
             allLines = fp.readlines()
-            #print "file lines count:",len(allLines)
+            print "file lines count:",len(allLines)
         while r < len(allLines):       #处理 大文件
             visit_index = re.compile(r'^访问')
             visit = (allLines[r + 0].decode('gbk')).encode('utf-8')
@@ -119,7 +119,7 @@ def stock_I(num):
 start = datetime.datetime.now()
 if __name__ =="__main__":
     #pool =multiprocessing.Pool(processes = 4)
-    #for i in xrange(418,901000):
+    #for i in xrange(0,901000):
         #pool.apply_async(stock_I,(i,))
     #pool.close()
     #pool.join()
